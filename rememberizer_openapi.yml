@@ -1,0 +1,238 @@
+openapi: 3.0.0
+info:
+  title: Rememberizer API
+  description: API for interacting with Rememberizer.
+  version: v1
+servers:
+  - url: 'https://api.rememberizer.ai/api/v1'
+paths:
+  /account/:
+    get:
+      description: Get account information
+      operationId: account
+      responses:
+        '200':
+          description: User account information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: The unique identifier of the user. Do not show this information anywhere.
+                  email:
+                    type: string
+                    format: email
+                    description: The email address of the user.
+                  name:
+                    type: string
+                    description: The name of the user.
+
+  /integrations/:
+    get:
+      description: This operation retrieves available data sources.
+      operationId: integrations_retrieve
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique identifier of the data source. Do not show this information anywhere.
+                        integration_type:
+                          type: string
+                        integration_step:
+                          type: string
+                        source:
+                          type: string
+                        document_type:
+                          type: string
+                        document_stats:
+                          type: object
+                          properties:
+                            status:
+                              type: object
+                              properties:
+                                indexed:
+                                  type: integer
+                                indexing:
+                                  type: integer
+                                error:
+                                  type: integer
+                            total_size:
+                              type: integer
+                            document_count:
+                              type: integer
+                  message:
+                    type: string
+                  code:
+                    type: string
+ 
+  /documents/:
+    get:
+      description: Use this operation to retrieve metadata about all available documents and Slack channels within the data sources.
+      operationId: integrations_list_file_and_channel
+      parameters:
+      - in: query
+        name: page
+        description: Page's index
+        schema:
+          type: integer
+      - in: query
+        name: page_size
+        description: The maximum number of documents returned in a page
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        document_id:
+                          type: string
+                          description: The unique identifier of the document. Do not show this information anywhere.
+                        name:
+                          type: string
+                        type:
+                          type: string
+                        path:
+                          type: string
+                        url:
+                          type: string
+                        id:
+                          type: integer
+                        integration_type:
+                          type: string
+                        source:
+                          type: string
+                        status:
+                          type: string
+                        indexed_on:
+                          type: string
+                          format: date-time
+                        size:
+                          type: integer
+          
+  /documents/search/:
+    get:
+      description: Initiate a search operation with a query text of up to 400 words and receive the most semantically similar responses from the stored knowledge. For question-answering, convert your question into an ideal answer and submit it to receive similar real answers.
+      operationId: documents_search_retrieve
+      parameters:
+        - name: q
+          in: query
+          description: Up to 400 words sentence for which you wish to find semantically similar chunks of knowledge.
+          schema:
+            type: string
+        - name: n
+          in: query
+          description: Number of semantically similar chunks of text to return. Use 'n=3' for up to 5, and 'n=10' for more information. If you do not receive enough information, consider trying again with a larger 'n' value.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful retrieval of documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        chunk_id:
+                          type: string
+                        document:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            document_id:
+                              type: string
+                            name:
+                              type: string
+                            type:
+                              type: string
+                            path:
+                              type: string
+                            url:
+                              type: string
+                            size:
+                              type: string
+                            created_time:
+                              type: string
+                            modified_time:
+                              type: string
+                            integration:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                integration_type:
+                                  type: string
+                                integration_step:
+                                  type: string
+                                source:
+                                  type: string
+                                document_stats:
+                                  type: object
+                                  properties:
+                                    status:
+                                      type: object
+                                      properties:
+                                        indexed:
+                                          type: integer
+                                        indexing:
+                                          type: integer
+                                        error:
+                                          type: integer
+                                    total_size:
+                                      type: integer
+                                      description: Total size of the data source in bytes
+                                    document_count:
+                                      type: integer
+                        matched_content:
+                          type: string
+                        distance:
+                          type: number
+                          description: Cosine similarity
+                  message:
+                    type: string
+                  code:
+                    type: string
+                    nullable: true
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
