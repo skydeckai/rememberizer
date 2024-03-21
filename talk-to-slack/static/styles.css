@@ -1,0 +1,140 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+  height: 100vh;
+}
+
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-width: 600px;
+  margin: auto;
+  background-color: #000000;
+  height: 100%;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #a5a5a5;
+  margin-bottom: 30px;
+}
+
+.suggested-actions a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.suggested-actions a:hover,
+.suggested-actions a:visited {
+  color: #ffffff;
+}
+
+.links {
+  margin-bottom: 40px;
+}
+
+.links a {
+  display: block;
+  margin-bottom: 15px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.links a:hover,
+.links a:visited {
+  color: #e6e7d1;
+}
+
+
+.disclaimer {
+  font-size: 14px;
+  color: #888888;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.logout-button {
+  background-color: #333; /* Dark grey */
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.logout-button:hover {
+  background-color: #555; /* Lighter grey */
+}
+
+.channels-list {
+  padding-left: 20px;
+}
+
+.chat-container {
+  background-color: #000000;
+  padding: 20px 0px;
+  margin: 0 auto;
+}
+
+.suggested-actions {
+  display: block;
+  margin-bottom: 15px;
+  color: #c1c7f0;
+  text-decoration: none;
+  font-size: 18px;
+
+}
+
+.chatbox {
+  /* Styles for the chat input form */
+  padding: 0 0px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.chatbox input[type="text"] {
+  padding: 15px 30px; 
+  font-size: 18px;
+  background-color: #333;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 400px;
+  max-width: 800px;
+}
+.chatbox button {
+  padding: 15px 30px;
+  font-size: 18px;
+  background-color: #1c9bef;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.footer {
+  color: #a5a5a5;
+  font-size: 12px;
+}
+
+.markdown {
+  flex: 1;
+  overflow-y: auto;
+}

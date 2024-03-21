@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Talk to Slack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Talk to Slack</h1>
+            <p class="subtitle">By rememberizer.ai</p>
+            <a href="/logout" class="logout-button">Log Out</a>
+        </div>    
+        <p>Your account is {{account_info['name']}} ({{account_info['email']}}), welcome to the Rememberizer. You can connect one or more of your Slack channels through Rememberizer, then use our AI bot as an expert on your discussions. </p>
+        {% include 'chatbox.html' %}
+    </div>
+</body>
+</html>
+

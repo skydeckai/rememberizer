@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slack Integration Info</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Slack Integration Info</h1>
+            <a href="/logout" class="logout-button">Log Out</a>
+        </div>
+        <div>
+            {% if slack_integration%}
+                <p>Connected workspace: <b>{{ slack_integration['source'] }}</b></p>
+                <p>Channels: </p>
+                <ul class="channels-list">
+                    {% for channel in slack_channels %}
+                        <li>#{{ channel['name'] }}{% if loop.last %}&nbsp;{% endif %}</li>
+                    {% endfor %}
+                </ul>    
+            {% else %}
+                <p>You haven't connected to any Slack workspace.</p>
+            {% endif %}
+        </div>
+
+        {% include 'chatbox.html' %}
+    </div>
+</body>
+</html>
