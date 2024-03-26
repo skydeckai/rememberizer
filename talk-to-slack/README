@@ -33,6 +33,7 @@ Set these environment variables:
 ### Running the Application
 
 1. **Start Flask App**: Run `flask run` in the terminal and access the app at `http://localhost:5000`.
+2. **Copy the callback URL to your Rememberizer app config**: `https://<YOURHOST>/auth/rememberizer/callback` example: `http://localhost:5000/auth/rememberizer/callback`
 
 ### Deploying to the Cloud
 
