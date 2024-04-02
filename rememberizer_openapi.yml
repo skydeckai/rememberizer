@@ -8,6 +8,7 @@ servers:
 paths:
   /account/:
     get:
+      summary: Retrieve current user's account details.
       description: Get account information
       operationId: account
       responses:
@@ -31,6 +32,7 @@ paths:
 
   /integrations/:
     get:
+      summary: List all available data source integrations.
       description: This operation retrieves available data sources.
       operationId: integrations_retrieve
       responses:
@@ -80,8 +82,9 @@ paths:
  
   /documents/:
     get:
+      summary: Retrieve a list of all documents and Slack channels.
       description: Use this operation to retrieve metadata about all available documents and Slack channels within the data sources.
-      operationId: integrations_list_file_and_channel
+      operationId: documents_list_file_and_channel
       parameters:
       - in: query
         name: page
@@ -141,6 +144,7 @@ paths:
           
   /documents/search/:
     get:
+      summary: Search for documents by semantic similarity.
       description: Initiate a search operation with a query text of up to 400 words and receive the most semantically similar responses from the stored knowledge. For question-answering, convert your question into an ideal answer and submit it to receive similar real answers.
       operationId: documents_search_retrieve
       parameters:
@@ -236,3 +240,95 @@ paths:
           description: Not found
         '500':
           description: Internal server error
+  /documents/{document_id}/contents/:
+    get:
+      summary: Retrieve specific document contents by ID.
+      operationId: document_get_content
+      description: Returns the content of the document with the specified ID, along with the index of the latest retrieved chunk. Each call fetches up to 20 chunks. To get more, use the end_chunk value from the response as the start_chunk for the next call.
+      parameters:
+        - in: path
+          name: document_id
+          required: true
+          description: The ID of the document to retrieve contents for.
+          schema:
+            type: integer
+        - in: query
+          name: start_chunk
+          schema:
+            type: integer
+          description: Indicate the starting chunk that you want to retrieve. If not specified, the default value is 0.
+        - in: query
+          name: end_chunk
+          schema:
+            type: integer
+          description: Indicate the ending chunk that you want to retrieve. If not specified, the default value is start_chunk + 20.
+      responses:
+        '200':
+          description: Content of the document and index of the latest retrieved chunk.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: The content of the document.
+                  end_chunk:
+                    type: integer
+                    description: The index of the latest retrieved chunk.
+        '404':
+          description: Document not found.
+        '500':
+          description: Internal server error.
+  /common-knowledge/subscribed-list/:
+    get:
+      summary: List subscribed common knowledge sources.
+      description: This operation retrieves the list of the shared knowledge (also known as common knowledge) that the user has subscribed to. Each shared knowledge includes a list of document ids where user can access.
+      operationId: common_knowledge_retrieve
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: This is the unique identifier of the shared knowledge. Do not show this information anywhere.
+                    num_of_subscribers:
+                      type: integer
+                      description: This indicates the number of users who have subscribed to this shared knowledge
+                    publisher_name:
+                      type: string
+                    published_by_me:
+                      type: boolean
+                      description: This indicates whether the shared knowledge was published by the current user or not
+                    subscribed_by_me:
+                      type: boolean
+                      description: This indicates whether the shared knowledge was subscribed by the current user or not, it should be true in this API
+                    created:
+                      type: string
+                      description: This is the time when the shared knowledge was created
+                    modified:
+                      type: string
+                      description: This is the time when the shared knowledge was last modified
+                    name:
+                      type: string
+                      description: This is the name of the shared knowledge
+                    image_url:
+                      type: string
+                      description: This is the image url of the shared knowledge
+                    description:
+                      type: string
+                      description: This is the description of the shared knowledge
+                    memento:
+                      type: integer
+                      description: This is the ID of the Rememberizer memento where the shared knowledge was created from.
+                    document_ids:
+                      type: array
+                      items:
+                        type: integer
+                      description: This is the list of document ids that belong to the shared knowledge
