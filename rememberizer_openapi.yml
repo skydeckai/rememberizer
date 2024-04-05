@@ -21,7 +21,7 @@ paths:
                 properties:
                   id:
                     type: integer
-                    description: The unique identifier of the user. Do not show this information anywhere.
+                    description: The unique identifier of the user.
                   email:
                     type: string
                     format: email
@@ -45,12 +45,13 @@ paths:
                 properties:
                   data:
                     type: array
+                    description: List of available data sources
                     items:
                       type: object
                       properties:
                         id:
                           type: integer
-                          description: The unique identifier of the data source. Do not show this information anywhere.
+                          description: The unique identifier of the data source.
                         integration_type:
                           type: string
                         integration_step:
@@ -77,8 +78,10 @@ paths:
                               type: integer
                   message:
                     type: string
+                    description: A message indicating the status of the operation.
                   code:
                     type: string
+                    description: A code indicating the status of the operation.
  
   /documents/:
     get:
@@ -96,6 +99,12 @@ paths:
         description: The maximum number of documents returned in a page
         schema:
           type: integer
+      - in: query
+        name: integration_type
+        description: Filter documents by integration type.
+        schema:
+          type: string
+          enum: [google_drive, slack, dropbox, common_knowledge]
       responses:
         '200':
           description: Successful operation
@@ -106,41 +115,56 @@ paths:
                 properties:
                   count:
                     type: integer
+                    description: The total number of documents.
                   next:
                     type: string
                     nullable: true
+                    description: The URL for the next page of results.
                   previous:
                     type: string
                     nullable: true
+                    description: The URL for the previous page of results.
                   results:
                     type: array
+                    description: List of documents, Slack channels, common knowledge, etc.
                     items:
                       type: object
                       properties:
                         document_id:
                           type: string
-                          description: The unique identifier of the document. Do not show this information anywhere.
+                          format: uuid
+                          description: The unique identifier of the document.
                         name:
                           type: string
+                          description: The name of the document.
                         type:
                           type: string
+                          description: The type of the document.
                         path:
                           type: string
+                          description: The path of the document.
                         url:
                           type: string
+                          description: The URL of the document.
                         id:
                           type: integer
+                          description: The unique identifier of the document.
                         integration_type:
                           type: string
+                          description: The integration type of the document.
                         source:
                           type: string
+                          description: The source of the document.
                         status:
                           type: string
+                          description: The status of the document.
                         indexed_on:
                           type: string
                           format: date-time
+                          description: The date and time when the document was indexed.
                         size:
                           type: integer
+                          description: The size of the document in bytes.
           
   /documents/search/:
     get:
@@ -168,34 +192,46 @@ paths:
                 properties:
                   data:
                     type: array
+                    description: List of semantically similar chunks of knowledge
                     items:
                       type: object
                       properties:
                         chunk_id:
                           type: string
+                          description: The unique identifier of the chunk.
                         document:
                           type: object
                           properties:
                             id:
                               type: integer
+                              description: The unique identifier of the document.
                             document_id:
                               type: string
+                              description: The unique identifier of the document.
                             name:
                               type: string
+                              description: The name of the document.
                             type:
                               type: string
+                              description: The type of the document.
                             path:
                               type: string
+                              description: The path of the document.
                             url:
                               type: string
+                              description: The URL of the document.
                             size:
                               type: string
+                              description: The size of the document.
                             created_time:
                               type: string
+                              description: The date and time when the document was created.
                             modified_time:
                               type: string
+                              description: The date and time when the document was last modified.
                             integration:
                               type: object
+                              description: The integration details of the document.
                               properties:
                                 id:
                                   type: integer
@@ -224,13 +260,16 @@ paths:
                                       type: integer
                         matched_content:
                           type: string
+                          description: The semantically similar content.
                         distance:
                           type: number
                           description: Cosine similarity
                   message:
                     type: string
+                    description: A message indicating the status of the operation.
                   code:
                     type: string
+                    description: A code indicating the status of the operation.
                     nullable: true
         '400':
           description: Bad request
@@ -280,55 +319,3 @@ paths:
           description: Document not found.
         '500':
           description: Internal server error.
-  /common-knowledge/subscribed-list/:
-    get:
-      summary: List subscribed common knowledge sources.
-      description: This operation retrieves the list of the shared knowledge (also known as common knowledge) that the user has subscribed to. Each shared knowledge includes a list of document ids where user can access.
-      operationId: common_knowledge_retrieve
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      description: This is the unique identifier of the shared knowledge. Do not show this information anywhere.
-                    num_of_subscribers:
-                      type: integer
-                      description: This indicates the number of users who have subscribed to this shared knowledge
-                    publisher_name:
-                      type: string
-                    published_by_me:
-                      type: boolean
-                      description: This indicates whether the shared knowledge was published by the current user or not
-                    subscribed_by_me:
-                      type: boolean
-                      description: This indicates whether the shared knowledge was subscribed by the current user or not, it should be true in this API
-                    created:
-                      type: string
-                      description: This is the time when the shared knowledge was created
-                    modified:
-                      type: string
-                      description: This is the time when the shared knowledge was last modified
-                    name:
-                      type: string
-                      description: This is the name of the shared knowledge
-                    image_url:
-                      type: string
-                      description: This is the image url of the shared knowledge
-                    description:
-                      type: string
-                      description: This is the description of the shared knowledge
-                    memento:
-                      type: integer
-                      description: This is the ID of the Rememberizer memento where the shared knowledge was created from.
-                    document_ids:
-                      type: array
-                      items:
-                        type: integer
-                      description: This is the list of document ids that belong to the shared knowledge
