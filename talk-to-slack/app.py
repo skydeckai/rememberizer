@@ -94,7 +94,7 @@ def slack_info():
         
         slack_channels = []
         if slack_integration:
-            documents_response = requests.get(f'https://api.rememberizer.ai/api/v1/documents/', headers=headers)
+            documents_response = requests.get(f'https://api.rememberizer.ai/api/v1/documents?integration_type=slack', headers=headers)
             if documents_response.status_code != 200:
                 raise Exception(f'Failed to fetch documents: {documents_response.status_code}')
             documents = documents_response.json()
