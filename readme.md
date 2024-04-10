@@ -15,8 +15,7 @@ rememberizer-integration-samples/
 ├── notebooks/
 │   ├── .env.sample
 │   ├── callback_server.py
-│   ├── developer_guide.ipynb
-│   └── readme.md
+│   └── developer_guide.ipynb
 ├── talk-to-slack/
 │   ├── .env.sample
 │   ├── README
@@ -55,7 +54,12 @@ This folder provides a Jupyter Notebook and a Flask server to facilitate the int
 - `.env.sample`: A sample environment file for configuring your application's credentials.
 - `callback_server.py`: A Python script implementing a simple Flask server designed to handle the OAuth2 callback for Rememberizer integrations. This server listens for the redirect URI after a user authorizes your application, capturing the authorization code sent by Rememberizer.
 - `developer_guide.ipynb`: A comprehensive Jupyter Notebook that serves as a step-by-step guide for developers looking to integrate with Rememberizer. It includes executable code snippets and explanatory text, covering the entire integration process from user authorization to API utilization.
-- `readme.md`: A README file providing an overview of the contents and purpose of this folder.
+
+Here's the walkthrough video:
+
+https://github.com/skydeckai/rememberizer/assets/20924562/614ef839-9104-4e6f-9555-2dbea68e2130
+
+
 
 ### `talk-to-slack/`
 
