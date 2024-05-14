@@ -4,7 +4,7 @@ info:
   description: API for interacting with Rememberizer.
   version: v1
 servers:
-  - url: 'https://api.rememberizer.ai/api/v1'
+  - url: "https://api.rememberizer.ai/api/v1"
 paths:
   /account/:
     get:
@@ -12,7 +12,7 @@ paths:
       description: Get account information
       operationId: account
       responses:
-        '200':
+        "200":
           description: User account information.
           content:
             application/json:
@@ -21,7 +21,7 @@ paths:
                 properties:
                   id:
                     type: integer
-                    description: The unique identifier of the user.
+                    description: The unique identifier of the user. Do not show this information anywhere.
                   email:
                     type: string
                     format: email
@@ -36,7 +36,7 @@ paths:
       description: This operation retrieves available data sources.
       operationId: integrations_retrieve
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -51,7 +51,7 @@ paths:
                       properties:
                         id:
                           type: integer
-                          description: The unique identifier of the data source.
+                          description: The unique identifier of the data source. Do not show this information anywhere.
                         integration_type:
                           type: string
                           description: The type of the data source.
@@ -92,31 +92,30 @@ paths:
                   code:
                     type: string
                     description: A code indicating the status of the operation.
- 
   /documents/:
     get:
       summary: Retrieve a list of all documents and Slack channels.
       description: Use this operation to retrieve metadata about all available documents and Slack channels within the data sources.
       operationId: documents_list_file_and_channel
       parameters:
-      - in: query
-        name: page
-        description: Page's index
-        schema:
-          type: integer
-      - in: query
-        name: page_size
-        description: The maximum number of documents returned in a page
-        schema:
-          type: integer
-      - in: query
-        name: integration_type
-        description: Filter documents by integration type.
-        schema:
-          type: string
-          enum: [google_drive, slack, dropbox, common_knowledge]
+        - in: query
+          name: page
+          description: Page's index
+          schema:
+            type: integer
+        - in: query
+          name: page_size
+          description: The maximum number of documents returned in a page
+          schema:
+            type: integer
+        - in: query
+          name: integration_type
+          description: Filter documents by integration type.
+          schema:
+            type: string
+            enum: [google_drive, slack, dropbox, common_knowledge]
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -143,7 +142,7 @@ paths:
                         document_id:
                           type: string
                           format: uuid
-                          description: The unique identifier of the document.
+                          description: The unique identifier of the document. Do not show this information anywhere.
                         name:
                           type: string
                           description: The name of the document.
@@ -175,7 +174,6 @@ paths:
                         size:
                           type: integer
                           description: The size of the document in bytes.
-          
   /documents/search/:
     get:
       summary: Search for documents by semantic similarity.
@@ -193,7 +191,7 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Successful retrieval of documents
           content:
             application/json:
@@ -282,11 +280,11 @@ paths:
                     type: string
                     description: A code indicating the status of the operation.
                     nullable: true
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-        '500':
+        "500":
           description: Internal server error
   /documents/{document_id}/contents/:
     get:
@@ -311,7 +309,7 @@ paths:
             type: integer
           description: Indicate the ending chunk that you want to retrieve. If not specified, the default value is start_chunk + 20.
       responses:
-        '200':
+        "200":
           description: Content of the document and index of the latest retrieved chunk.
           content:
             application/json:
@@ -324,25 +322,78 @@ paths:
                   end_chunk:
                     type: integer
                     description: The index of the latest retrieved chunk.
-        '404':
+        "404":
           description: Document not found.
-        '500':
+        "500":
           description: Internal server error.
- /documents/memorize/:
+  /common-knowledge/subscribed-list/:
+    get:
+      description: This operation retrieves the list of the shared knowledge (also known as common knowlege) that the user has subscribed to. Each shared knowledge includes a list of document ids where user can access.
+      operationId: common_knowledge_retrieve
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: This is the unique identifier of the shared knowledge. Do not show this information anywhere.
+                    num_of_subscribers:
+                      type: integer
+                      description: This indicates the number of users who have subscribed to this shared knowledge
+                    publisher_name:
+                      type: string
+                    published_by_me:
+                      type: boolean
+                      description: This indicates whether the shared knowledge was published by the current user or not
+                    subscribed_by_me:
+                      type: boolean
+                      description: This indicates whether the shared knowledge was subscribed by the current user or not, it should be true in this API
+                    created:
+                      type: string
+                      description: This is the time when the shared knowledge was created
+                    modified:
+                      type: string
+                      description: This is the time when the shared knowledge was last modified
+                    name:
+                      type: string
+                      description: This is the name of the shared knowledge
+                    image_url:
+                      type: string
+                      description: This is the image url of the shared knowledge
+                    description:
+                      type: string
+                      description: This is the description of the shared knowledge
+                    memento:
+                      type: integer
+                      description: This is the ID of the Rememberizer memento where the shared knowledge was created from.
+                    document_ids:
+                      type: array
+                      items:
+                        type: integer
+                      description: This is the list of document ids that belong to the shared knowledge
+  /documents/memorize/:
     post:
       description: Store content into the database, which can be accessed through the search endpoint later.
       operationId: documents_memorize_create
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          name: name
-          schema:
-           type: string
-        - in: body
-          name: content
-          schema:
-           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                content:
+                  type: string
+              required:
+                - name
+                - content
       responses:
         "201":
           description: Content stored successfully
