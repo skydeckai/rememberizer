@@ -328,3 +328,27 @@ paths:
           description: Document not found.
         '500':
           description: Internal server error.
+ /documents/memorize/:
+    post:
+      description: Store content into the database, which can be accessed through the search endpoint later.
+      operationId: documents_memorize_create
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: name
+          schema:
+           type: string
+        - in: body
+          name: content
+          schema:
+           type: string
+      responses:
+        "201":
+          description: Content stored successfully
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal server error
